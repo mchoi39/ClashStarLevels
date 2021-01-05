@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-logo {
@@ -40,4 +42,10 @@
 .card {
   height: 200px;
   width: 200px;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-control {
+  width: 50% !important;
 }

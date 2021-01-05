@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import StarCard from './StarCard';
 import StarLevel from './StarLevel';
-import common from '../assets/';
-import rare from '../assets/rare';
-import epic from '../assets/epic';
-import legendary from '../assets/legendary';
+// import common from '../assets/';
+// import rare from '../assets/rare';
+// import epic from '../assets/epic';
+// import legendary from '../assets/legendary';
 import stockcards from '../assets/stockcards';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Form } from 'react-bootstrap';
 
 export default function StockCards() {
   const initial = {
@@ -211,6 +211,9 @@ export default function StockCards() {
     'zap',
     'zappies',
   ];
+
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [hideCard, setHideCard] = useState({
     archers: { hide: false },
     arrows: { hide: false },
@@ -326,26 +329,60 @@ export default function StockCards() {
     }
   };
 
+  const handleInputChange = (event) => {
+    setSearchQuery(event.currentTarget.value);
+  };
+
   return (
     <div className='App'>
       <Container>
-        <Row>
-          {arr.map((card, ind) => {
-            return (
-              <div>
-                <img
-                  src={stockcards[card]}
-                  alt=''
-                  key={ind}
-                  onClick={() => onClick(card)}
-                ></img>
-                {hideCard[card].hide && (
-                  <StarLevel card={card} key={ind}></StarLevel>
-                )}
-              </div>
-            );
-          })}
-        </Row>
+        <form>
+          <input onChange={handleInputChange} placeholder='Search' />
+        </form>
+
+        {searchQuery === '' ? (
+          <Row>
+            {arr.map((card, ind) => {
+              return (
+                <div>
+                  <img
+                    src={stockcards[card]}
+                    alt=''
+                    key={ind}
+                    onClick={() => onClick(card)}
+                  ></img>
+                  {hideCard[card].hide && (
+                    <StarLevel card={card} key={ind}></StarLevel>
+                  )}
+                </div>
+              );
+            })}
+          </Row>
+        ) : (
+          <Row>
+            {arr
+              .filter((card) =>
+                card
+                  .toLocaleLowerCase()
+                  .includes(searchQuery.toLocaleLowerCase())
+              )
+              .map((filtered, ind) => {
+                return (
+                  <div>
+                    <img
+                      src={stockcards[filtered]}
+                      alt=''
+                      key={ind}
+                      onClick={() => onClick(filtered)}
+                    ></img>
+                    {hideCard[filtered].hide && (
+                      <StarLevel card={filtered} key={ind}></StarLevel>
+                    )}
+                  </div>
+                );
+              })}
+          </Row>
+        )}
       </Container>
     </div>
   );
